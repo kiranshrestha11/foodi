@@ -3,15 +3,17 @@ import 'package:foodi/screens/category_meal_screen.dart';
 
 class CategoryItem extends StatelessWidget {
   final String title;
+  final String id;
   final Color color;
-  CategoryItem(this.title, this.color);
+  CategoryItem(this.title, this.color, this.id);
 
   void selectedCategory(BuildContext ctx) {
     Navigator.pushNamed(
       ctx,
       CategoryMealScreen.routeName,
       arguments: {
-        'title': title,
+        "title": title,
+        "id": id,
       },
     );
   }

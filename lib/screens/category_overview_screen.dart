@@ -7,12 +7,14 @@ class CaregoryOverviewScreeen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to Foodi App'),
+        title: const Text(
+          'Welcome to Foodi App',
+        ),
       ),
       body: GridView(
         padding: EdgeInsets.all(15),
-        children: Dummy_CATEGORIES.map((catData) {
-          return CategoryItem(catData.title, catData.color);
+        children: DUMMY_CATEGORIES.map((catData) {
+          return CategoryItem(catData.title, catData.color, catData.id);
         }).toList(),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200.0,

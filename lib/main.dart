@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodi/screens/category_meal_screen.dart';
 import 'package:foodi/screens/category_overview_screen.dart';
+import 'package:foodi/screens/meals_detailed_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,8 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Foodi App',
-      home: CaregoryOverviewScreeen(),
       theme: ThemeData(
         primaryColor: Colors.deepOrange,
         accentColor: Colors.deepOrangeAccent,
@@ -25,8 +26,13 @@ class MyApp extends StatelessWidget {
               title: TextStyle(fontSize: 24, fontFamily: 'Roboto'),
             ),
       ),
+      home: CaregoryOverviewScreeen(),
       routes: {
         CategoryMealScreen.routeName: (ctx) => CategoryMealScreen(),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (ctx) => CaregoryOverviewScreeen());
       },
     );
   }
