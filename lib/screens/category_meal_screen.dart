@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:foodi/dummy_data.dart';
+import 'package:foodi/models/meal.dart';
 import 'package:foodi/widgets/meal_item.dart';
 
-class CategoryMealScreen extends StatelessWidget {
+class CategoryMealScreen extends StatefulWidget {
 //  final String title;
 //  CategoryMealScreen(this.title);
   static const String routeName = '/meal_screen';
+  final List<Meal> availableMeals;
+  CategoryMealScreen(this.availableMeals);
+
   @override
-  Widget build(BuildContext context) {
+  _CategoryMealScreenState createState() => _CategoryMealScreenState();
+}
+
+class _CategoryMealScreenState extends State<CategoryMealScreen> {
+  String categoryTitle;
+  List<Meal> categoryMeals;
+//----didChangeDependencies is used because widgets value is return only after initState----
+  @override
+  void didChangeDependencies() {
     final routeArgs = ModalRoute.of(context).settings.arguments as Map;
-    final categoryTitle = routeArgs["title"];
+    categoryTitle = routeArgs["title"];
     final categoryId = routeArgs["id"];
-    final categoryMeals = DUMMY_MEALS
+    categoryMeals = widget.availableMeals
         .where((meal) => meal.categories.contains(categoryId))
         .toList();
+    super.didChangeDependencies();
+  }
+
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryTitle),

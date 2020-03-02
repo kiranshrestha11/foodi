@@ -1,11 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:foodi/dummy_data.dart';
+import 'package:foodi/screens/bottom_bar_screen.dart';
 import 'package:foodi/screens/category_meal_screen.dart';
 import 'package:foodi/screens/category_overview_screen.dart';
+import 'package:foodi/screens/filter_screen.dart';
 import 'package:foodi/screens/meals_detailed_screen.dart';
+import 'package:foodi/screens/tab_view_screen.dart';
+import 'models/meal.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> _filters = {
+    '_glutenFree': false,
+    '_vegan': false,
+    '_vegetarian': false,
+    '_lactoseFree': false,
+  };
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        if (_filters['_glutenFree'] && meal.isGlutenFree) {
+          return false;
+        }
+        if (_filters['_vegan'] && meal.isVegan) {
+          return false;
+        }
+        if (_filters['_vegetarian'] && meal.isVegetarian) {
+          return false;
+        }
+        if (_filters['_lactoseFree'] && meal.isLactoseFree) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,13 +65,16 @@ class MyApp extends StatelessWidget {
               title: TextStyle(fontSize: 24, fontFamily: 'Roboto'),
             ),
       ),
-      home: CaregoryOverviewScreeen(),
+      home: BottomBarScreen(),
       routes: {
-        CategoryMealScreen.routeName: (ctx) => CategoryMealScreen(),
+        CategoryMealScreen.routeName: (ctx) =>
+            CategoryMealScreen(_availableMeals),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        BottomBarScreen.routeName: (ctx) => BottomBarScreen(),
+        FilterScreen.routeName: (ctx) => FilterScreen(_setFilters, _filters),
       },
       onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (ctx) => CaregoryOverviewScreeen());
+        return MaterialPageRoute(builder: (ctx) => CategoryOverviewScreeen());
       },
     );
   }
