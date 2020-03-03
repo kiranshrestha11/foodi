@@ -30,7 +30,7 @@ class _TabViewScreenState extends State<TabViewScreen> {
         body: TabBarView(
           children: <Widget>[
             CategoryOverviewScreeen(),
-            FavouriteScreen(),
+            //FavouriteScreen(),
           ],
         ),
       ),

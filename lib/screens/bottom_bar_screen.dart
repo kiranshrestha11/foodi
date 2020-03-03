@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:foodi/models/meal.dart';
 import 'package:foodi/screens/category_overview_screen.dart';
 import 'package:foodi/screens/favourite_screen.dart';
 import 'package:foodi/widgets/main_drawer.dart';
 
 class BottomBarScreen extends StatefulWidget {
   static const String routeName = "/bottom_bar_screen";
+  final List<Meal> favouriteMeals;
+  BottomBarScreen(this.favouriteMeals);
   @override
   _BottomBarScreenState createState() => _BottomBarScreenState();
 }
 
 class _BottomBarScreenState extends State<BottomBarScreen> {
-  final List<Map<String, Object>> _pages = [
-    {'page': CategoryOverviewScreeen(), 'title': "Categories"},
-    {'page': FavouriteScreen(), 'title': "Favourites"},
-  ];
+  List<Map<String, Object>> _pages = [];
 
   int _selectedPageIndex = 0;
   void _selectedPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  void initState() {
+    _pages = [
+      {'page': CategoryOverviewScreeen(), 'title': "Categories"},
+      {'page': FavouriteScreen(widget.favouriteMeals), 'title': "Favourites"},
+    ];
+    super.initState();
   }
 
   @override

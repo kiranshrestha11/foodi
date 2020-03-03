@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
     '_lactoseFree': false,
   };
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favouriteMeals = [];
 
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
@@ -45,6 +46,26 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  //for adding/removing favourite Meals---------
+  void _toggleFavoutiteMeals(String mealId) {
+    final existingIndex =
+        _favouriteMeals.indexWhere((meal) => meal.id == mealId);
+    if (existingIndex >= 0) {
+      setState(() {
+        _favouriteMeals.removeAt(existingIndex);
+      });
+    } else {
+      setState(() {
+        _favouriteMeals
+            .add(DUMMY_MEALS.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
+
+  bool isMealFavourite(String mealId) {
+    return _favouriteMeals.any((meal) => meal.id == mealId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,12 +86,16 @@ class _MyAppState extends State<MyApp> {
               title: TextStyle(fontSize: 24, fontFamily: 'Roboto'),
             ),
       ),
-      home: BottomBarScreen(),
+      //home: BottomBarScreen(),
+      initialRoute: '/',
+
       routes: {
+        '/': (ctx) => BottomBarScreen(_favouriteMeals),
         CategoryMealScreen.routeName: (ctx) =>
             CategoryMealScreen(_availableMeals),
-        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        BottomBarScreen.routeName: (ctx) => BottomBarScreen(),
+        MealDetailScreen.routeName: (ctx) =>
+            MealDetailScreen(_toggleFavoutiteMeals, isMealFavourite),
+        BottomBarScreen.routeName: (ctx) => BottomBarScreen(_favouriteMeals),
         FilterScreen.routeName: (ctx) => FilterScreen(_setFilters, _filters),
       },
       onUnknownRoute: (settings) {
